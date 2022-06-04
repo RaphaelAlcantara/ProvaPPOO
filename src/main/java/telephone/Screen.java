@@ -1,8 +1,4 @@
 package telephone;
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,43 +9,33 @@ import java.util.List;
 public class Screen {
 
     public Screen(PhoneModel model) {
-        model.addListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("digits")) {
-                    List<Integer> digits = (List<Integer>) evt.getNewValue();
-                    if(digits.size() == 0) {
-                        System.out.println("pressionado: " + digits.get(digits.size()-1));
-                    }
-                    else {
-                        System.out.println("pressionado: " + digits.get(digits.size()-1));
-                    }
-
-                }
-            }
-        });
-
-        model.listageral(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("digits")) {
-                    List<Integer> digits = (List<Integer>) evt.getNewValue();
-                    //tirar o 10
-                    if(digits.size() == 10 ) {
-                        String lista = "";
-                        for(int i = 0; i < digits.size(); i++) {
-                            lista += digits.get(i);
-                            lista += "";
-                        }
-                        System.out.println("Ligando para:" + lista + "...");
-                    }
-                }
-            }
-        });
-
-
-
-
-
+        addFirstObserver(model);
+        addSecondObserver(model);
     }
+
+    private void addFirstObserver(PhoneModel model) {
+        model.addListener(evt -> {
+            int lastDigit = (Integer) evt.getOldValue();
+
+            System.out.println("inserting: " + lastDigit);
+
+        });
+    }
+    private void addSecondObserver(PhoneModel model) {
+        model.addListener(evt -> {
+            List<Integer> all = (List<Integer>) evt.getNewValue();
+
+            if(all.size() >  model.getMaxLength() - 1){
+
+                StringBuilder text = new StringBuilder();
+                for (Integer i :all) {
+                    text.append(i);
+                }
+
+                System.out.println("Calling for: " + text + "...");
+            }
+        });
+    }
+
+
 }

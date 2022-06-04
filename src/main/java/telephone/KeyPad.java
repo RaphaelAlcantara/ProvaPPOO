@@ -21,6 +21,7 @@ public class KeyPad {
             System.out.println("Pressing: " + newDigit);
             model.addDigit(newDigit);
         }
+
     }
 
 }
