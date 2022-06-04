@@ -12,8 +12,8 @@ public class WebSearchModel {
     private final List<QueryObserver> observers = new ArrayList<>();
     private PoliticaDeFiltragem politicaDeFiltragem ;
 
-    public interface QueryObserver { // declaraçao da  interface
-        void onQuery(String query); // metodo eh executado no observer quando for notificado
+    public interface QueryObserver {
+        void onQuery(String query);
     }
 
     public interface PoliticaDeFiltragem {
@@ -29,13 +29,13 @@ public class WebSearchModel {
     public void pretendToSearch() {
         try (BufferedReader br = new BufferedReader(new FileReader(sourceFile))) {
 
-            while (true) { // 02 percorre todas as queries que estao no arquivo recebido
+            while (true) {
                 String line = br.readLine();
-                if (line == null) { // 05 quando a ultima linha eh lida, sai do for;
+                if (line == null) {
                     break;
                 }
                 if(deveNotificar(line)){
-                    notifyAllObservers(line); // 04 notifica todos os observers passando a nova linha (query) lida
+                    notifyAllObservers(line);
                 }
             }
         } catch (IOException e) {
@@ -44,11 +44,11 @@ public class WebSearchModel {
     }
 
     public void addQueryObserver(QueryObserver queryObserver, PoliticaDeFiltragem pf) {
-        observers.add(queryObserver); // adiciona a classe snooper como observer
+        observers.add(queryObserver);
         politicaDeFiltragem = pf;
     }
     private void notifyAllObservers(String line) {
-        for (QueryObserver obs : observers) { // 05 notifica todos os observers armazenados na variavel chamando o metodo onQuery
+        for (QueryObserver obs : observers) {
             obs.onQuery(line);
         }
     }
