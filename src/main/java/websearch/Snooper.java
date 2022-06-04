@@ -6,11 +6,15 @@ package websearch;
 public class Snooper {
 
     public Snooper(WebSearchModel model) {
-        model.addQueryObserver( new WebSearchModel.QueryObserver() {
-            @Override
-            public void onQuery(String query) {
-                System.out.println("Query: " + query);
+        model.addQueryObserver(query -> {
+            if(query.contains("gallon")){
+                System.out.println("[Gallon Found]: " + query);
+            }else {
+                System.out.println("[Long Query..]:" + query);
             }
-        });
+        },
+                texto -> texto.contains("gallon") || texto.length() >= 35);
+
+
     }
 }
